@@ -1,0 +1,17 @@
+name: Build typst files in CI!
+
+on: push
+jobs:
+  check_nix:
+    name: Build typst files
+    runs-on: ubuntu-22.04
+    steps:
+      - name: git checkout
+        uses: actions/checkout@v3
+      - uses: nixbuild/nix-quick-install-action@v26
+      - run: nix develop .#ci --command typst compile main.typ
+      - name: upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: Output PDF files
+          path: /*.pdf 
